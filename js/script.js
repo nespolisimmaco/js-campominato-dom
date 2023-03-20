@@ -2,15 +2,16 @@
 // [X] Il computer deve generare 16 numeri casuali nello stesso range della difficoltà prescelta: le bombe.
 // [X] I numeri nella lista delle bombe non possono essere duplicati.
 // [23, 65, 1, 4,78,15,....];
-// In seguito l'utente clicca su una cella: se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba - la cella si colora di rosso e la partita termina, altrimenti la cella cliccata si colora di azzurro e l'utente può continuare a cliccare sulle altre celle.
-// La partita termina quando il giocatore clicca su una bomba o raggiunge il numero massimo possibile di numeri consentiti.
-// Al termine della partita il software deve comunicare il punteggio, cioè il numero di volte che l’utente ha cliccato su una cella che non era una bomba.
+// [X] In seguito l'utente clicca su una cella: se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba - la cella si colora di rosso e la partita termina, altrimenti la cella cliccata si colora di azzurro e l'utente può continuare a cliccare sulle altre celle.
+// [X] La partita termina quando il giocatore clicca su una bomba o raggiunge il numero massimo possibile di numeri consentiti.
+// [X] Al termine della partita il software deve comunicare il punteggio, cioè il numero di volte che l’utente ha cliccato su una cella che non era una bomba.
 
 // Griglia
 const grid = document.querySelector(".grid");
 // Scelgo diversi livelli di difficoltà
 const difficultySelect = document.getElementById("level");
 console.log(difficultySelect);
+// Difficoltà iniziale (default)
 let difficultyLevel = "easy";
 let numberOfBoxes = 100;
 // Array con 16 numeri random (le bombe)
@@ -24,13 +25,17 @@ let maxScore = 0;
 const playButton = document.querySelector(".play-button");
 console.log(playButton);
 playButton.addEventListener("click", function () {
-    // Svuoto l'elemento grid (nel caso in cui già contenga i box)
+    // Ripristino
     grid.innerHTML = "";
+    grid.style = "";
+    score = 0;
     difficultyLevelChoice();
+    // Array con 16 numeri random (le bombe)
     randomNumbers = generateRandomNumbers(16, numberOfBoxes);
     console.log(randomNumbers);
     maxScore = numberOfBoxes - randomNumbers.length;
-    console.log(maxScore);
+    console.log("Punteggio massimo possibile: ", maxScore);
+    // Inserisco i box nella grid (DOM)
     for (let i = 1; i <= numberOfBoxes; i++) {
         const box = generateGridItem(i);
         grid.append(box);
@@ -49,6 +54,7 @@ playButton.addEventListener("click", function () {
 function generateGridItem(indexNumber) {
     const newBox = document.createElement("div");
     const number = indexNumber;
+    // Controllo difficoltà per cambiare grandezza dei box
     if (difficultyLevel === "easy") {
         newBox.classList.add("grid-item", "grid-item-ten");
     } else if (difficultyLevel === "medium") {
@@ -70,6 +76,7 @@ function generateGridItem(indexNumber) {
 function difficultyLevelChoice() {
     difficultyLevel = difficultySelect.value;
     console.log(difficultyLevel);
+    // Controllo difficoltà per cambiare numero di box all'interno della griglia
     if (difficultyLevel === "easy") {
         numberOfBoxes = 100;
     } else if (difficultyLevel === "medium") {
@@ -87,27 +94,28 @@ function difficultyLevelChoice() {
 function handleClick() {
     const boxNumber = parseInt(this.innerText);
     console.log("Numero del box cliccato: ", boxNumber);
+    // SE il box cliccato è una bomba, il box diventa rosso e il gioco si ferma, comunicando il punteggio
+    // ALTRIMENTI il box diventa azzurro, il punteggio aumenta, e si controlla se si è raggiunto il punteggio massimo, quindi la vittoria
     if (randomNumbers.includes(boxNumber)) {
         this.classList.add("bomb");
         console.log("BOMBA!");
         grid.style = "pointer-events: none";
-        alert("BOMBA! Partita terminata :(");
+        alert(`BOMBA! Partita terminata :( | | IL TUO PUNTEGGIO: ${score}`);
+        console.log("Il tuo punteggio: ", score);
     } else {
         this.classList.add("box-clicked");
+        this.style = "pointer-events: none";
         if (score < maxScore) {
             score++; 
             console.log(score); 
-        } else if (score === maxScore) {
-            alert("HAI VINTO!!!")
-            console.log(score);
-            grid.style = "pointer-events: none";
         }
+        checkWin();
     }
 }
 
 // ***** NUMERI RANDOM *****
 function getRndInteger(min, max) {
-  return Math.floor(Math.random() * (max - min) ) + min;
+    return Math.floor(Math.random() * (max - min) ) + min;
 }
 
 /**
@@ -115,7 +123,7 @@ function getRndInteger(min, max) {
  * @param {number} bombsNumber numero di bombe (16)
  * @param {number} maxNumber limite massimo dei numeri casuali generati
  * @returns {array} numbersRandom array con i numeri casuali generati
- */
+*/
 function generateRandomNumbers(bombsNumber, maxNumber) {
     const numbersRandom = [];
     while (numbersRandom.length < bombsNumber) {
@@ -125,4 +133,17 @@ function generateRandomNumbers(bombsNumber, maxNumber) {
         }    
     }
     return numbersRandom;
+}
+
+// ***** CONTROLLO VITTORIA *****
+/**
+ * Description Controllo se l'utente ha vinto, quindi se ha raggiunto il punteggio massimo possibile
+ * @returns {}
+ */
+function checkWin() {
+    if (score === maxScore) {
+        console.log("Il tuo punteggio: ", score);
+        alert(`HAI VINTO!!! IL TUO PUNTEGGIO: ${score}`)
+        grid.style = "pointer-events: none";
+    }
 }
