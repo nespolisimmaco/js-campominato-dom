@@ -97,17 +97,19 @@ function handleClick() {
     // SE il box cliccato è una bomba, il box diventa rosso e il gioco si ferma, comunicando il punteggio
     // ALTRIMENTI il box diventa azzurro, il punteggio aumenta, e si controlla se si è raggiunto il punteggio massimo, quindi la vittoria
     if (randomNumbers.includes(boxNumber)) {
-        this.classList.add("bomb");
+        // Mostro tutte le bombe
+        showBombs(numberOfBoxes);
+        // Mostro messaggio con punteggio
         console.log("BOMBA!");
+        console.log("Il tuo punteggio: ", score);
         grid.style = "pointer-events: none";
         alert(`BOMBA! Partita terminata :( | | IL TUO PUNTEGGIO: ${score}`);
-        console.log("Il tuo punteggio: ", score);
     } else {
         this.classList.add("box-clicked");
         this.style = "pointer-events: none";
         if (score < maxScore) {
             score++; 
-            console.log(score); 
+            console.log("Punteggio: ", score); 
         }
         checkWin();
     }
@@ -146,4 +148,32 @@ function checkWin() {
         alert(`HAI VINTO!!! IL TUO PUNTEGGIO: ${score}`)
         grid.style = "pointer-events: none";
     }
+}
+
+// ***** MOSTRO TUTTE LE BOMBE *****
+/**
+ * Description Mostro tutte le bombe
+ * @param {number} numberOfBoxes quanti sono tutti i box
+ * @returns {}
+ */
+function showBombs(numberOfBoxes) {
+    const allBombs = document.querySelectorAll(".grid-item");
+    for (let i = 0; i < numberOfBoxes; i++) {
+        if (randomNumbers.includes(parseInt(allBombs[i].innerText))) {
+            allBombs[i].innerHTML = "";
+            const bombIcon = createBombIcon();
+            allBombs[i].append(bombIcon);
+            allBombs[i].classList.add("bomb");   
+        }
+    }
+}
+
+/**
+ * Description creo l'elemento che contiene l'icona della bomba
+ * @returns {element} elemento con icona
+ */
+function createBombIcon() {
+    const iconBomb = document.createElement("i");
+    iconBomb.classList.add("fa-solid", "fa-bomb", "fa-xl");
+    return iconBomb;
 }
