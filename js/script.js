@@ -1,3 +1,10 @@
+// [X] Generare una griglia di gioco quadrata in cui ogni cella contiene un numero compreso tra 1 e 100.
+// [X] Il computer deve generare 16 numeri casuali nello stesso range della difficoltà prescelta: le bombe.
+// [X] I numeri nella lista delle bombe non possono essere duplicati.
+// [23, 65, 1, 4,78,15,....];
+// In seguito l'utente clicca su una cella: se il numero è presente nella lista dei numeri generati - abbiamo calpestato una bomba - la cella si colora di rosso e la partita termina, altrimenti la cella cliccata si colora di azzurro e l'utente può continuare a cliccare sulle altre celle.
+// La partita termina quando il giocatore clicca su una bomba o raggiunge il numero massimo possibile di numeri consentiti.
+// Al termine della partita il software deve comunicare il punteggio, cioè il numero di volte che l’utente ha cliccato su una cella che non era una bomba.
 
 // Scelgo diversi livelli di difficoltà
 const difficultySelect = document.getElementById("level");
@@ -14,6 +21,8 @@ playButton.addEventListener("click", function () {
     // Svuoto l'elemento grid (nel caso in cui già contenga i box)
     grid.innerHTML = "";
     difficultyLevelChoice();
+    const randomNumbers = generateRandomNumbers(16, numberOfBoxes);
+    console.log(randomNumbers);
     for (let i = 1; i <= numberOfBoxes; i++) {
         const box = generateGridItem(i);
         grid.append(box);
@@ -22,6 +31,8 @@ playButton.addEventListener("click", function () {
 
 /////////////////////
 // FUNCTIONS
+
+// ***** GRID ITEM *****
 /**
  * Description Genero un grid item, ossia un box da inserire nella griglia
  * @param {number} indexNumber
@@ -43,6 +54,7 @@ function generateGridItem(indexNumber) {
     return newBox;
 }
 
+// ***** SCELTA DIFFICOLTà *****
 /**
  * Description Assegno l'input (select) a difficultyLevel, controllo quale sia la difficoltà scelta, e in base a questa il numero di box cambia
  * @returns {}
@@ -59,12 +71,35 @@ function difficultyLevelChoice() {
     }
 }
 
+// ***** HANDLE CLICK *****
 /**
  * Description aggiunge al box la classe che colora il background, e stampa in console il nunero del box cliccato
- * @returns {any}
+ * @returns {}
  */
 function handleClick() {
     this.classList.add("box-clicked");
     const boxNumber = parseInt(this.innerText);
     console.log("Numero del box cliccato: ", boxNumber);
+}
+
+// ***** NUMERI RANDOM *****
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min) ) + min;
+}
+
+/**
+ * Description Genera 16 numeri casuali nello stesso range della difficoltà prescelta: le bombe.
+ * @param {number} bombsNumber numero di bombe (16)
+ * @param {number} maxNumber limite massimo dei numeri casuali generati
+ * @returns {array} numbersRandom array con i numeri casuali generati
+ */
+function generateRandomNumbers(bombsNumber, maxNumber) {
+    const numbersRandom = [];
+    while (numbersRandom.length < bombsNumber) {
+        const number = getRndInteger(1, maxNumber);
+        if (!numbersRandom.includes(number)) {
+            numbersRandom.push(number);    
+        }    
+    }
+    return numbersRandom;
 }
