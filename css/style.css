@@ -1,0 +1,107 @@
+/* ********** VARIABLES ********** */
+:root {
+    --header-height: 80px;
+    --footer-height: 50px;
+}
+
+/* ********** RESET ********** */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ********** GENERAL ********** */
+body {
+    background-color: #2D4654;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.wrapper {
+    height: 100vh;
+    width: 100%;
+}
+
+/* ********** HEADER ********** */
+header {
+    height: var(--header-height);
+    background-color: #805E73;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+/* Play button */
+.play-button,
+#level {
+    padding: 5px 25px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    background-color: white;
+}
+
+/* ********** MAIN ********** */
+.main-content {
+    padding: 60px 0;
+    height: calc(100vh - (var(--header-height) + var(--footer-height)));
+    width: 100%;
+    overflow-y: auto;
+}
+
+.container {
+    width: 1000px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+/* ----- Grid ----- */
+.grid {
+    height: 1000px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.grid-item {
+    border: 1px solid #9EE493;
+    font-size: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.grid-item-ten {
+    width: calc(1000px / 10);
+    height: calc(1000px / 10);
+}
+
+.grid-item-nine {
+    width: calc(1000px / 9);
+    height: calc(1000px / 9);
+}
+
+.grid-item-seven {
+    width: calc(1000px / 7);
+    height: calc(1000px / 7);
+}
+
+.box-clicked {
+    background-color: #87BCDE;
+}
+
+/* ********** FOOTER ********** */
+footer {
+    height: var(--footer-height);
+    background-color: #805E73;
+    line-height: var(--footer-height);
+    padding-left: 1rem;
+}
+
+footer a {
+    color: #F7EE7F;
+}
