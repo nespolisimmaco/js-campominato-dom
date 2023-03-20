@@ -6,23 +6,31 @@
 // La partita termina quando il giocatore clicca su una bomba o raggiunge il numero massimo possibile di numeri consentiti.
 // Al termine della partita il software deve comunicare il punteggio, cioè il numero di volte che l’utente ha cliccato su una cella che non era una bomba.
 
+// Griglia
+const grid = document.querySelector(".grid");
 // Scelgo diversi livelli di difficoltà
 const difficultySelect = document.getElementById("level");
 console.log(difficultySelect);
 let difficultyLevel = "easy";
 let numberOfBoxes = 100;
+// Array con 16 numeri random (le bombe)
+let randomNumbers = [];
+// Punteggio
+let score = 0;
+// Punteggio massimo (se si raggiunge, l'utente vince)
+let maxScore = 0;
 
 // L'utente clicca sul bottone per generare la griglia di gioco
 const playButton = document.querySelector(".play-button");
 console.log(playButton);
 playButton.addEventListener("click", function () {
-    // Griglia
-    const grid = document.querySelector(".grid");
     // Svuoto l'elemento grid (nel caso in cui già contenga i box)
     grid.innerHTML = "";
     difficultyLevelChoice();
-    const randomNumbers = generateRandomNumbers(16, numberOfBoxes);
+    randomNumbers = generateRandomNumbers(16, numberOfBoxes);
     console.log(randomNumbers);
+    maxScore = numberOfBoxes - randomNumbers.length;
+    console.log(maxScore);
     for (let i = 1; i <= numberOfBoxes; i++) {
         const box = generateGridItem(i);
         grid.append(box);
@@ -77,9 +85,24 @@ function difficultyLevelChoice() {
  * @returns {}
  */
 function handleClick() {
-    this.classList.add("box-clicked");
     const boxNumber = parseInt(this.innerText);
     console.log("Numero del box cliccato: ", boxNumber);
+    if (randomNumbers.includes(boxNumber)) {
+        this.classList.add("bomb");
+        console.log("BOMBA!");
+        grid.style = "pointer-events: none";
+        alert("BOMBA! Partita terminata :(");
+    } else {
+        this.classList.add("box-clicked");
+        if (score < maxScore) {
+            score++; 
+            console.log(score); 
+        } else if (score === maxScore) {
+            alert("HAI VINTO!!!")
+            console.log(score);
+            grid.style = "pointer-events: none";
+        }
+    }
 }
 
 // ***** NUMERI RANDOM *****

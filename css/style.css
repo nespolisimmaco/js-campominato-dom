@@ -94,6 +94,10 @@ header {
     background-color: #87BCDE;
 }
 
+.bomb {
+    background-color: red;
+}
+
 /* ********** FOOTER ********** */
 footer {
     height: var(--footer-height);
